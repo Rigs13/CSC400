@@ -1,0 +1,126 @@
+package ctaMod2;
+
+/**
+ * A class implementing the Bag Interface and uses the Item class to 
+ * handle the operations of a Customer's shopping cart instance.
+ * @author Semisi Rigby
+ */
+
+public class ShoppingCart implements BagInterface<Item> {
+	
+	// attributes of the ShoppingCart object
+	private final Item[] cart;
+	private int numOfItems;
+	private static final int DEFAULT_CAPACITY = 25;
+	
+	/**
+	 * Creates an empty cart with default capacity of 25
+	 */
+	public ShoppingCart() {
+		this(DEFAULT_CAPACITY);
+	}
+	/**
+	 * Creates an empty cart having a given default capacity
+	 * @param chosenCapacity	capacity desired from the user implementation
+	 */
+	public ShoppingCart(int chosenCapacity) {
+		// check safe cast; the new array is empty, therefore safe
+		Item[] tempCart = (Item[])new Object[chosenCapacity];
+		cart = tempCart;
+		numOfItems = 0;
+	}
+
+	/**
+	 * Gets the current number of items contained in the cart
+	 * @return int	The number of items currently in the cart
+	 */
+	@Override
+	public int getCurrentSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * Determines if the cart is empty
+	 * @return boolean	True if empty, false if not empty
+	 */
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Add an item to the cart
+	 * @param newItem	The item to be added
+	 * @return boolean	True if successful, false if not
+	 */
+	@Override
+	public boolean add(Item newItem) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Clear the contents of the cart
+	 */
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * Removes an unspecified item from the cart
+	 * @return Item	 Either the removed item, or null if unsuccessful
+	 */
+	@Override
+	public Item remove() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Removes a specific item from the cart
+	 * @param Item item	 The item to be removed
+	 * @return boolean	 True if successful, false if unsuccessful
+	 */
+	@Override
+	public boolean remove(Item item) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Count the occurrences of a given item within the cart
+	 * @param Item item	 The item to be counted
+	 * @return int	The number of occurrences of the item within the cart
+	 */
+	@Override
+	public int getFrequencyOf(Item item) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * Determines if an item is contained within the cart
+	 * @param Item item	 The item to find
+	 * @return boolean	 True if found, false if not found
+	 */
+	@Override
+	public boolean contains(Item item) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Retrieves all items within the cart
+	 * @return Item[]	A new array of all the entries within the cart
+	 */
+	@Override
+	public Item[] toArray() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

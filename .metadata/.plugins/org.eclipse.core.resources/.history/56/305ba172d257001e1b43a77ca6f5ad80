@@ -1,0 +1,5 @@
+package ctaMod2;
+
+public interface BagInterface {
+
+}

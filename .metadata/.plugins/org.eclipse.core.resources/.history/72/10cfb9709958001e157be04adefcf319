@@ -1,0 +1,220 @@
+package ctaMod2;
+
+/**
+ * A class implementing the Bag Interface and uses the Item class to 
+ * handle the operations of a Customer's shopping cart instance.
+ * @author Semisi Rigby
+ */
+
+public class ShoppingCart implements BagInterface<Item> {
+	
+	// attributes of the ShoppingCart object
+	private final Item[] cart;
+	private int numOfItems;
+	private static final int DEFAULT_CAPACITY = 25;
+	// additional attributes to protect integrity
+	private boolean integrity;
+	private static final int MAX_CAPACITY = 100;
+	
+	/**
+	 * Creates an empty cart with default capacity of 25
+	 */
+	public ShoppingCart() {
+		this(DEFAULT_CAPACITY);
+	}
+	/**
+	 * Creates an empty cart having a given default capacity
+	 * @param chosenCapacity	capacity desired from the user implementation
+	 */
+	public ShoppingCart(int chosenCapacity) {
+		// add integrity check of the cart object
+		integrity = false;
+		if (chosenCapacity <= MAX_CAPACITY) {
+			// check safe cast; the new array is empty, therefore safe
+			Item[] tempCart = (Item[])new Object[chosenCapacity];
+			cart = tempCart;
+			numOfItems = 0;
+			// changes the integrity of the cart object to true
+			integrity = true;
+		}
+		else {
+			throw new IllegalStateException("Attempt to create a cart whose " + 
+					"capacity is too large.");
+		}
+	}
+
+	/**
+	 * Gets the current number of items contained in the cart
+	 * @return int	The number of items currently in the cart
+	 */
+	@Override
+	public int getCurrentSize() {
+		return numOfItems;
+	}
+
+	/**
+	 * Determines if the cart is empty
+	 * @return boolean	True if empty, false if not empty
+	 */
+	@Override
+	public boolean isEmpty() {
+		return numOfItems == 0; // makes use of comparison operator
+	}
+
+	/**
+	 * Add an item to the cart
+	 * @param newItem	The item to be added
+	 * @return boolean	True if successful, false if not
+	 */
+	@Override
+	public boolean add(Item newItem) {
+		// check for integrity of cart object
+		checkIntegrity();
+		boolean result = true;
+		if (isArrayFull()) {
+			result = false;
+		}
+		else { // assumes result is true
+			cart[numOfItems] = newItem;
+			numOfItems++;
+		}
+		return result;
+	}
+
+	/**
+	 * Clear the contents of the cart
+	 */
+	@Override
+	public void clear() {
+		// while loop that calls remove() until cart is empty
+		while (!isEmpty()) {
+			remove();
+		}
+	}
+
+	/**
+	 * Removes an unspecified item from the cart
+	 * @return Item	 Either the removed item, or null if unsuccessful
+	 */
+	@Override
+	public Item remove() {
+		// integrity check of cart object
+		checkIntegrity();
+		// remove item with private method for abstraction and reusability
+		Item result = removeItem(numOfItems - 1);
+		return result;
+	}
+
+	/**
+	 * Removes a specific item from the cart
+	 * @param Item item	 The item to be removed
+	 * @return boolean	 True if successful, false if unsuccessful
+	 */
+	@Override
+	public boolean remove(Item item) {
+		// integrity check of cart object
+		checkIntegrity();
+		// check for index with private method
+		int i = getIndexOf(item);
+		// private method for removal
+		Item result = removeItem(i);
+		return item.equals(result);
+	}
+
+	/**
+	 * Count the occurrences of a given item within the cart
+	 * @param Item item	 The item to be counted
+	 * @return int	The number of occurrences of the item within the cart
+	 */
+	@Override
+	public int getFrequencyOf(Item item) {
+		// check integrity of cart object
+		checkIntegrity();
+		int count = 0;
+		// for loop to search for specific item instances in cart
+		for (int i = 0; i < numOfItems; i++) {
+			if (item.equals(cart[i])) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Determines if an item is contained within the cart
+	 * @param Item item	 The item to find
+	 * @return boolean	 True if found, false if not found
+	 */
+	@Override
+	public boolean contains(Item item) {
+		// integrity check of cart object
+		checkIntegrity();
+		// use private method getIndexOf() which uses the same logic
+		return getIndexOf(item) > -1; // use comparator to check if index > -1
+	}
+
+	/**
+	 * Retrieves all items within the cart
+	 * @return Item[]	A new array of all the entries within the cart
+	 */
+	@Override
+	public Item[] toArray() {
+		// create a new Item array with exact length of number of Items in cart
+		Item[] result = (Item[])new Object[numOfItems];
+		// copy cart to new array
+		for (int i = 0; i < numOfItems; i++) {
+			result[i] = cart[i];
+		}
+		return result;
+	}
+	
+	// private method; returns true if bag is full, false if not
+	private boolean isArrayFull() {
+		return numOfItems >= cart.length;
+	}
+	
+	// private method; checks for integrity and throws exception if the object is 
+	// not properly initialized.
+	private void checkIntegrity() {
+		if (!integrity) {
+			throw new SecurityException("ShoppingCart object is corrupt.");
+		}
+	}
+	
+	// private method; handles the removal of items from the cart object and 
+	// returns the item at a given index, or null if non-existent
+	private Item removeItem(int givenIndex) {
+		Item result = null;
+		// if the bag is not empty and the given index is not negative
+		if (!isEmpty() && (givenIndex >= 0)) {
+			result = cart[givenIndex]; // item to remove
+			cart[givenIndex] = cart[numOfItems - 1]; // replace with last entry in cart
+			cart[numOfItems - 1] = null; // remove last item, replace null
+		}
+		return result;
+	}
+	
+	// private method; locates a given item within the cart
+	// returns the index (int) of the given item, or -1 if not found
+	// should be used after an integrity check of the cart object
+	private int getIndexOf(Item item) {
+		int where = -1; // search variable
+		boolean looking = true; // used to control while loop
+		int i = 0; // pointer for looping
+		// while loop to search through cart
+		while (looking && (i < numOfItems)) {
+			// if item is found
+			if (item.equals(cart[i])) {
+				looking = false; // break loop
+				where = i; // store the index as search variable
+			}
+			else {
+				i++;
+			}
+		}
+		return where;
+	}
+	
+	
+
+} // end of ShoppingCart Class
